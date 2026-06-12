@@ -1,0 +1,65 @@
+# ============================================================================
+# SMID 6.1 - Identidad y Acceso : configuracion base
+# Regla del Nucleo Fundacional 2.7 (cierra DT-2): este archivo SOLO contiene
+# referencias ${VARIABLE}; jamas valores secretos. Los secretos llegan por
+# variables de entorno o gestor de credenciales y se rotan al cerrar P0.
+# ============================================================================
+spring:
+  application:
+    name: smid-auth
+  threads:
+    virtual:
+      enabled: true                      # Java 21: virtual threads para el pool de peticiones
+
+  datasource:
+    # Sin valor por defecto para usuario/clave: el arranque falla rapido si faltan.
+    url: ${DB_URL:jdbc:mysql://localhost:3306/db_auth?useSSL=false&allowPublicKeyRetrieval=true&connectionTimeZone=UTC}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      # Flyway es el unico dueno del esquema (cierra DT-5). Hibernate solo valida.
+      ddl-auto: validate
+    open-in-view: false                  # higiene: ninguna sesion JPA viva en la capa web
+    show-sql: false
+    properties:
+      "[hibernate.jdbc.time_zone]": UTC  # toda fecha persiste y se lee en UTC
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+server:
+  port: 8081                             # tras el Gateway: /api/auth/** -> StripPrefix -> /**
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info             # superficie minima de Actuator
+
+# ----------------------------------------------------------------------------
+# Propiedades del dominio SMID
+# ----------------------------------------------------------------------------
+smid:
+  jwt:
+    emisor: ${JWT_ISSUER:smid-auth}
+    audiencia: ${JWT_AUDIENCE:smid-servicios}
+    kid-activo: ${JWT_KID:smid-2026-06}
+    expiracion-ms: ${JWT_EXPIRATION_MS:28800000}            # access token: 8 horas (una jornada)
+    refresh-expiracion-ms: ${JWT_REFRESH_EXPIRATION_MS:86400000}  # refresh: 24 horas
+    # Mapa kid -> secreto (cierra DT-3). Protocolo de rotacion:
+    #   1) agregar la clave nueva con su kid, 2) cambiar kid-activo,
+    #   3) conservar la clave anterior durante la ventana de rotacion,
+    #   4) retirarla al expirar los tokens emitidos con ella.
+    # La notacion [corchetes] preserva el nombre literal de la llave del mapa.
+    claves:
+      "[smid-2026-06]": ${JWT_SECRET}
+      # "[smid-2026-01]": ${JWT_SECRET_ANTERIOR}   # <- ejemplo durante una rotacion
+  seguridad:
+    rbac-habilitado: ${RBAC_ENABLED:true}
+  seed:
+    # Contrasena de los usuarios semilla (solo perfiles local|dev). No se imprime en logs.
+    password: ${SEED_PASSWORD:Smid.Local.2026}

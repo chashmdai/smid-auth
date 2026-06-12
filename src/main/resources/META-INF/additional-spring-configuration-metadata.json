@@ -1,0 +1,66 @@
+{
+  "groups": [
+    {
+      "name": "smid",
+      "type": "java.lang.Object",
+      "description": "Configuracion propia del dominio SMID."
+    },
+    {
+      "name": "smid.jwt",
+      "type": "cl.smid.auth.infraestructura.seguridad.PropiedadesJwt",
+      "description": "Configuracion de emision y rotacion de tokens JWT."
+    },
+    {
+      "name": "smid.seguridad",
+      "type": "java.lang.Object",
+      "description": "Parametros de seguridad del servicio."
+    },
+    {
+      "name": "smid.seed",
+      "type": "java.lang.Object",
+      "description": "Parametros del sembrador de datos local/dev."
+    }
+  ],
+  "properties": [
+    {
+      "name": "smid.jwt.emisor",
+      "type": "java.lang.String",
+      "description": "Valor del claim iss de los access tokens."
+    },
+    {
+      "name": "smid.jwt.audiencia",
+      "type": "java.lang.String",
+      "description": "Valor del claim aud de los access tokens."
+    },
+    {
+      "name": "smid.jwt.kid-activo",
+      "type": "java.lang.String",
+      "description": "Identificador de la clave activa usada para firmar tokens nuevos."
+    },
+    {
+      "name": "smid.jwt.expiracion-ms",
+      "type": "java.lang.Long",
+      "description": "Duracion del access token en milisegundos."
+    },
+    {
+      "name": "smid.jwt.refresh-expiracion-ms",
+      "type": "java.lang.Long",
+      "description": "Duracion del refresh token en milisegundos."
+    },
+    {
+      "name": "smid.jwt.claves",
+      "type": "java.util.Map<java.lang.String,java.lang.String>",
+      "description": "Mapa kid a secreto HS256 usado para firmar y validar tokens."
+    },
+    {
+      "name": "smid.seguridad.rbac-habilitado",
+      "type": "java.lang.Boolean",
+      "description": "Activa o desactiva reglas RBAC del servicio."
+    },
+    {
+      "name": "smid.seed.password",
+      "type": "java.lang.String",
+      "description": "Contrasena del usuario semilla en perfiles local/dev."
+    }
+  ]
+}
