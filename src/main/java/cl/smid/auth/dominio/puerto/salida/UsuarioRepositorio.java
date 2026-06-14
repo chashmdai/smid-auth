@@ -18,4 +18,10 @@ public interface UsuarioRepositorio {
      * la sesion persiste el id interno del usuario, no su alt_key.
      */
     Optional<Usuario> buscarPorIdConJerarquia(Long id);
+
+    /**
+     * Busca por alt_key (identidad publica) resolviendo unidad, sede y roles.
+     * Usado por la consulta servicio-a-servicio GET /usuarios/{altKey}.
+     */
+    Optional<Usuario> buscarPorAltKeyConJerarquia(String altKey);
 }

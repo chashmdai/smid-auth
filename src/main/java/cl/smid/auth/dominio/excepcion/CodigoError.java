@@ -23,6 +23,9 @@ public enum CodigoError {
     /** El cuerpo de la peticion no supera las validaciones declarativas. */
     VALIDACION("AUTZ-005", "La solicitud contiene datos invalidos."),
 
+    /** Recurso inexistente o fuera del alcance territorial del solicitante (-> 404). */
+    RECURSO_NO_ENCONTRADO("AUTZ-404", "El recurso solicitado no existe."),
+
     /** Fallo no controlado: nunca filtra detalles internos al cliente. */
     ERROR_INTERNO("AUTZ-500", "Ocurrio un error interno. Intente nuevamente mas tarde.");
 

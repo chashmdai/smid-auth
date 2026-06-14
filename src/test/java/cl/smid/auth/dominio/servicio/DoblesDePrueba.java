@@ -17,16 +17,21 @@ import java.util.concurrent.atomic.AtomicLong;
 class DummyUsuarioRepo implements UsuarioRepositorio {
     private final Map<String, Usuario> porEmail = new HashMap<>();
     private final Map<Long, Usuario> porId = new HashMap<>();
+    private final Map<String, Usuario> porAltKey = new HashMap<>();
 
     void guardar(Usuario u) {
         porEmail.put(u.email().toLowerCase(), u);
         porId.put(u.id(), u);
+        porAltKey.put(u.altKey(), u);
     }
     @Override public Optional<Usuario> buscarPorEmailConJerarquia(String email) {
         return Optional.ofNullable(porEmail.get(email));
     }
     @Override public Optional<Usuario> buscarPorIdConJerarquia(Long id) {
         return Optional.ofNullable(porId.get(id));
+    }
+    @Override public Optional<Usuario> buscarPorAltKeyConJerarquia(String altKey) {
+        return Optional.ofNullable(porAltKey.get(altKey));
     }
 }
 

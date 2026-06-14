@@ -88,8 +88,8 @@ public class ManejadorGlobalExcepciones {
         ErrorResponse cuerpo = ErrorResponse.de(
                 HttpStatus.NOT_FOUND.value(),
                 HttpStatus.NOT_FOUND.getReasonPhrase(),
-                "AUTZ-404",
-                "Recurso no encontrado.",
+                CodigoError.RECURSO_NO_ENCONTRADO.codigo(),
+                CodigoError.RECURSO_NO_ENCONTRADO.mensajePorDefecto(),
                 req.getRequestURI()
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(cuerpo);
@@ -118,6 +118,7 @@ public class ManejadorGlobalExcepciones {
             case CREDENCIALES_INVALIDAS, REFRESH_INVALIDO, NO_AUTENTICADO -> HttpStatus.UNAUTHORIZED;
             case ACCESO_DENEGADO -> HttpStatus.FORBIDDEN;
             case VALIDACION -> HttpStatus.BAD_REQUEST;
+            case RECURSO_NO_ENCONTRADO -> HttpStatus.NOT_FOUND;
             case ERROR_INTERNO -> HttpStatus.INTERNAL_SERVER_ERROR;
         };
     }

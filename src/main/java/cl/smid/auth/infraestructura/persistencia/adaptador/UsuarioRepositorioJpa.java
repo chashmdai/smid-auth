@@ -35,4 +35,10 @@ public class UsuarioRepositorioJpa implements UsuarioRepositorio {
     public Optional<Usuario> buscarPorIdConJerarquia(Long id) {
         return jpa.buscarPorIdConJerarquia(id).map(mapeador::aDominio);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Usuario> buscarPorAltKeyConJerarquia(String altKey) {
+        return jpa.buscarPorAltKey(altKey).map(mapeador::aDominio);
+    }
 }

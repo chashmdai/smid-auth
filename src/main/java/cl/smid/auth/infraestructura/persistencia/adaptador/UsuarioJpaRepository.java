@@ -10,7 +10,7 @@ import java.util.Optional;
 /**
  * Repositorio Spring Data del usuario. Las consultas usan @EntityGraph para
  * traer unidad, sede y roles en una sola ejecucion (sin N+1 ni doble query),
- * resolviendo la jerarquia completa que el login necesita.
+ * resolviendo la jerarquia completa que el login y la consulta necesitan.
  */
 public interface UsuarioJpaRepository extends JpaRepository<UsuarioEntity, Long> {
 
@@ -21,4 +21,8 @@ public interface UsuarioJpaRepository extends JpaRepository<UsuarioEntity, Long>
     @EntityGraph(attributePaths = {"unidad", "unidad.sede", "roles"})
     @Query("select u from UsuarioEntity u where u.id = :id")
     Optional<UsuarioEntity> buscarPorIdConJerarquia(Long id);
+
+    @EntityGraph(attributePaths = {"unidad", "unidad.sede", "roles"})
+    @Query("select u from UsuarioEntity u where u.altKey = :altKey")
+    Optional<UsuarioEntity> buscarPorAltKey(String altKey);
 }

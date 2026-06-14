@@ -1,9 +1,11 @@
 package cl.smid.auth.config;
 
 import cl.smid.auth.dominio.puerto.entrada.AutenticacionUseCase;
+import cl.smid.auth.dominio.puerto.entrada.ConsultaUsuarioUseCase;
 import cl.smid.auth.dominio.puerto.salida.*;
 import cl.smid.auth.dominio.servicio.AuthAuditPort;
 import cl.smid.auth.dominio.servicio.ServicioAutenticacion;
+import cl.smid.auth.dominio.servicio.ServicioConsultaUsuario;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -27,5 +29,10 @@ public class DominioConfig {
         return new ServicioAutenticacion(
                 usuarioRepositorio, sesionRepositorio, proveedorToken,
                 codificadorPassword, reloj, auditoria);
+    }
+
+    @Bean
+    public ConsultaUsuarioUseCase consultaUsuarioUseCase(UsuarioRepositorio usuarioRepositorio) {
+        return new ServicioConsultaUsuario(usuarioRepositorio);
     }
 }
