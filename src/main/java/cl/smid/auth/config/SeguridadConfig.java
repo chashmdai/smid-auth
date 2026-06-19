@@ -23,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  *  - Stateless puro: sin sesion de servidor (el estado vive en el JWT) y CSRF
  *    deshabilitado (no hay cookies de sesion que proteger).
  *  - BCrypt con costo 12 (>= 10 exigido por 3.5).
- *  - Rutas publicas: /auth/** (login/refresh/logout) y el health/info de Actuator.
+ *  - Rutas publicas: /auth/** (login/refresh/logout), Swagger/OpenAPI y health/info.
  *  - Rutas protegidas: /usuarios/** exige Bearer valido (consulta servicio-a-servicio).
  *  - @EnableMethodSecurity activa @PreAuthorize para autorizacion por rol/alcance.
  *
@@ -52,6 +52,7 @@ public class SeguridadConfig {
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/auth/login", "/auth/refresh", "/auth/logout").permitAll()
+                    .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                     .requestMatchers("/actuator/health", "/actuator/info").permitAll()
                     .requestMatchers("/usuarios/**").authenticated()
                     .anyRequest().authenticated()

@@ -44,6 +44,7 @@ coincidir **byte a byte**.
 | Persistencia | Spring Data JPA + Hibernate, MySQL 8 (InnoDB, `utf8mb4`) |
 | Migraciones | Flyway (`flyway-core` + `flyway-mysql`) |
 | JWT | jjwt 0.12.5 — firma HS256 simétrica con `kid` |
+| OpenAPI | SpringDoc OpenAPI 2.8.x — Swagger UI para Spring MVC |
 | Build | Maven |
 | Utilidades | Lombok |
 
@@ -142,6 +143,9 @@ Todas son **públicas** porque validan la credencial en su propio cuerpo.
 
 ### `POST /auth/login`  → `POST /api/auth/login`
 
+El frontend consume esta operacion via Gateway en `POST /api/auth/login`; el
+servicio la recibe internamente como `POST /auth/login`.
+
 **Request**
 ```json
 { "email": "admin@defensorianinez.cl", "password": "secreto" }
@@ -170,6 +174,9 @@ en el cuerpo; el cliente lo custodia y lo presenta en `/auth/refresh`.
 
 ### `POST /auth/refresh`  → `POST /api/auth/refresh`
 
+El frontend consume esta operacion via Gateway en `POST /api/auth/refresh`; el
+servicio la recibe internamente como `POST /auth/refresh`.
+
 Renueva el *access token* y **rota** el refresco.
 
 ```json
@@ -179,12 +186,35 @@ Respuesta: idéntica a la de login (con un `refreshToken` nuevo).
 
 ### `POST /auth/logout`  → `POST /api/auth/logout`
 
+El frontend consume esta operacion via Gateway en `POST /api/auth/logout`; el
+servicio la recibe internamente como `POST /auth/logout`.
+
 Revoca la sesión asociada al refresco. Idempotente.
 
 ```json
 { "refreshToken": "<token-opaco>" }
 ```
 Respuesta: `204 No Content`.
+
+### Documentacion OpenAPI / Swagger
+
+La especificacion OpenAPI queda disponible en:
+
+```text
+GET /v3/api-docs
+```
+
+La interfaz Swagger UI queda disponible en:
+
+```text
+GET /swagger-ui/index.html
+```
+
+Los endpoints de autenticacion son publicos y por eso la documentacion no define
+Bearer JWT como requisito global. Los contratos documentados usan solamente DTOs
+publicos de la capa `api` y mantienen identificadores opacos `altKey`, sin
+exponer entidades JPA, ids numericos internos ni detalles de la logica de
+autenticacion.
 
 ---
 

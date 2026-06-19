@@ -1,6 +1,7 @@
 package cl.smid.auth.api.error;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.Instant;
 import java.util.Map;
 
@@ -20,13 +21,29 @@ import java.util.Map;
  * ensuciar las respuestas de error que no son de validacion.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Schema(description = "Sobre de error unificado del ecosistema SMID.")
 public record ErrorResponse(
+        @Schema(description = "Codigo HTTP numerico.", example = "401")
         int status,
+
+        @Schema(description = "Razon HTTP legible.", example = "Unauthorized")
         String error,
+
+        @Schema(description = "Codigo estable de negocio.", allowableValues = {"AUTZ-001", "AUTZ-002", "AUTZ-005", "AUTZ-500"},
+                example = "AUTZ-001")
         String codigo,
+
+        @Schema(description = "Mensaje orientado a persona usuaria.", example = "Credenciales invalidas. Verifique sus datos de acceso.")
         String mensaje,
+
+        @Schema(description = "Mapa campo-mensaje presente solo en errores de validacion.",
+                example = "{\"email\":\"El email no tiene un formato valido\"}")
         Map<String, String> detalles,
+
+        @Schema(description = "Ruta que produjo el error.", example = "/auth/login")
         String ruta,
+
+        @Schema(description = "Instante UTC del error.", example = "2027-01-01T12:00:00Z")
         Instant timestamp
 ) {
     public static ErrorResponse de(int status, String error, String codigo,
